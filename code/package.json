@@ -1,0 +1,21 @@
+{
+  "name": "teamforge",
+  "version": "1.0.0",
+  "description": "Intelligent Student Team Formation Platform powered by Classical AI Algorithms",
+  "main": "chat/server.js",
+  "scripts": {
+    "dev": "node chat/server.js",
+    "start": "node chat/server.js",
+    "ws": "node chat/server.js"
+  },
+  "keywords": [
+    "teamforge",
+    "student-collaboration",
+    "classical-ai",
+    "csp",
+    "php",
+    "mysql"
+  ],
+  "author": "TeamForge",
+  "license": "MIT"
+}

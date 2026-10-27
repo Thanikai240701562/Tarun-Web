@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ephemeral Team Chat — TeamForge</title>
+    <meta name="description" content="Real-time ephemeral team chat with zero persistent database message retention">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap 5 CSS & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <!-- Custom Design System -->
+    <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+
+<div class="app-wrapper">
+    <div class="sidebar-overlay"></div>
+
+    <!-- Sidebar Navigation -->
+    <aside class="app-sidebar">
+        <div class="sidebar-header">
+            <a href="dashboard.html" class="sidebar-brand text-decoration-none">
+                <div class="brand-icon">
+                    <i class="bi bi-diagram-3-fill"></i>
+                </div>
+                <div>
+                    <span>Team<span style="color:#818cf8;">Forge</span></span>
+                </div>
+            </a>
+        </div>
+
+        <div class="sidebar-menu">
+            <div class="menu-category">Overview</div>
+            <a href="dashboard.html" class="nav-link-custom">
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span>Dashboard</span>
+            </a>
+
+            <div class="menu-category">Collaboration & Events</div>
+            <a href="students.html" class="nav-link-custom">
+                <i class="bi bi-people-fill"></i>
+                <span>Student Directory</span>
+            </a>
+            <a href="events.html" class="nav-link-custom">
+                <i class="bi bi-calendar-event-fill"></i>
+                <span>College Events</span>
+            </a>
+            <a href="teams.html" class="nav-link-custom">
+                <i class="bi bi-folder-fill"></i>
+                <span>My Teams & Projects</span>
+            </a>
+
+            <div class="menu-category">Classical AI Engine</div>
+            <a href="ai-generator.html" class="nav-link-custom">
+                <i class="bi bi-cpu-fill"></i>
+                <span>AI Team Generator</span>
+            </a>
+
+            <div class="menu-category">Team Operations</div>
+            <a href="tasks.html" class="nav-link-custom">
+                <i class="bi bi-kanban-fill"></i>
+                <span>Task Board</span>
+            </a>
+            <a href="chat.html" class="nav-link-custom active">
+                <i class="bi bi-chat-dots-fill"></i>
+                <span>Team Group Chat</span>
+            </a>
+            <a href="sessions.html" class="nav-link-custom">
+                <i class="bi bi-clock-history"></i>
+                <span>Scheduled Sessions</span>
+            </a>
+
+            <div class="menu-category" id="sidebarAdminCategory">Faculty & Admin</div>
+            <a href="admin.html" class="nav-link-custom sidebar-admin-link">
+                <i class="bi bi-shield-lock-fill"></i>
+                <span>Faculty Center & Logs</span>
+            </a>
+        </div>
+
+        <div class="sidebar-footer">
+            <div class="d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center gap-2 overflow-hidden">
+                    <div class="avatar-sm bg-primary text-white fw-bold" id="sidebarUserAvatar">A</div>
+                    <div class="text-truncate" style="line-height:1.2;">
+                        <div class="text-white small fw-bold text-truncate" id="sidebarUserName">Aarav Sharma</div>
+                        <div class="text-secondary text-truncate" style="font-size:0.72rem;" id="sidebarUserEmail">aarav.sharma@student.edu</div>
+                    </div>
+                </div>
+                <button type="button" class="btn text-secondary hover-white p-1" title="Sign Out" onclick="window.api.logout()">
+                    <i class="bi bi-box-arrow-right fs-5"></i>
+                </button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="app-main">
+        <header class="app-topbar">
+            <div class="d-flex align-items-center gap-3">
+                <button type="button" class="btn btn-sm btn-light d-lg-none" id="sidebarToggleBtn">
+                    <i class="bi bi-list fs-5"></i>
+                </button>
+                <div class="d-flex align-items-center gap-2">
+                    <h5 class="fw-bold mb-0 text-dark">Ephemeral Room: ByteCrafters</h5>
+                    <span class="badge bg-success-subtle text-success"><i class="bi bi-circle-fill me-1" style="font-size:0.5rem;"></i>Live Buffer</span>
+                </div>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+                <span class="badge bg-secondary-subtle text-secondary font-mono d-none d-sm-inline-block">Zero DB Writes</span>
+                <a href="profile.html" class="avatar-sm bg-primary text-white fw-bold text-decoration-none" id="topbarUserAvatar">A</a>
+            </div>
+        </header>
+
+        <main class="content-body">
+            <div class="container-fluid px-0">
+                <div class="card-tf border bg-white shadow-sm d-flex flex-column" style="height: calc(100vh - 160px);">
+                    <!-- Chat Header Banner -->
+                    <div class="p-3 border-bottom d-flex align-items-center justify-content-between bg-light rounded-top">
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="bi bi-shield-check text-success fs-5"></i>
+                            <div>
+                                <div class="fw-bold text-dark small">Privacy-Preserving Ephemeral Communication</div>
+                                <div class="text-muted" style="font-size:0.72rem;">Sliding in-memory buffer automatically wipes messages on server restart.</div>
+                            </div>
+                        </div>
+                        <span class="badge bg-white text-dark border font-mono">Channel: #bytecrafters-standup</span>
+                    </div>
+
+                    <!-- Chat Message Stream -->
+                    <div class="flex-grow-1 p-4 overflow-y-auto" id="chatMessageStream" style="background:#fafbfc;">
+                        <!-- Messages dynamically populated by JS -->
+                    </div>
+
+                    <!-- Message Input Form -->
+                    <div class="p-3 border-top bg-white">
+                        <form id="chatForm" class="d-flex gap-2">
+                            <input type="text" class="form-control" id="chatInput" placeholder="Type an ephemeral message to teammates..." autocomplete="off" required>
+                            <button type="submit" class="btn btn-tf-primary px-4 d-flex align-items-center gap-1">
+                                <i class="bi bi-send-fill"></i>
+                                <span class="d-none d-sm-inline">Send</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<!-- Bootstrap & JS Framework -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/main.js"></script>
+<script>
+async function loadChat() {
+    const stream = document.getElementById('chatMessageStream');
+    try {
+        const res = await window.api.getChat(1);
+        if (res.success && res.messages) {
+            stream.innerHTML = res.messages.map(m => `
+                <div class="d-flex gap-2 mb-3">
+                    <div class="avatar-sm bg-primary text-white fw-bold flex-shrink-0">
+                        ${(m.user_name || 'U').charAt(0)}
+                    </div>
+                    <div>
+                        <div class="d-flex align-items-center gap-2 mb-1">
+                            <span class="fw-bold text-dark small">${m.user_name || 'Teammate'}</span>
+                            <span class="text-muted" style="font-size:0.7rem;">${m.timestamp || ''}</span>
+                        </div>
+                        <div class="p-2 px-3 rounded-3 bg-white border shadow-sm small text-dark" style="max-width: 580px; line-height: 1.45;">
+                            ${m.text}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            stream.scrollTop = stream.scrollHeight;
+        }
+    } catch (e) {
+        console.warn('Chat load failed:', e);
+    }
+}
+
+document.getElementById('chatForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const input = document.getElementById('chatInput');
+    const msg = input.value.trim();
+    if (!msg) return;
+
+    input.value = '';
+    try {
+        await window.api.sendChat(1, msg);
+        loadChat();
+    } catch (err) {
+        window.tfToast('Failed to send message', 'error');
+    }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    loadChat();
+    // Auto refresh every 3 seconds for simulated live chat
+    setInterval(loadChat, 3000);
+});
+</script>
+</body>
+</html>

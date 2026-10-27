@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join TeamForge — Create Student Account</title>
+    <meta name="description" content="Register an account on TeamForge to discover hackathon teams and project teammates">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap 5 CSS & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <!-- Custom Design System -->
+    <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body class="bg-light">
+
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-7 col-lg-6">
+                <div class="text-center mb-4">
+                    <a href="index.html" class="d-inline-flex align-items-center gap-2 text-decoration-none text-dark fs-3 fw-bold mb-2">
+                        <div class="brand-icon">
+                            <i class="bi bi-diagram-3-fill"></i>
+                        </div>
+                        <span>Team<span style="color:#4f46e5;">Forge</span></span>
+                    </a>
+                    <p class="text-muted small">Create your student profile and find hackathon teammates</p>
+                </div>
+
+                <div class="card-tf shadow-lg border p-4 p-md-5 bg-white">
+                    <h4 class="fw-bold text-dark mb-4">Create Student Profile</h4>
+
+                    <div id="registerAlert" class="alert alert-danger d-none align-items-center p-3 mb-4 rounded-3" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill fs-5 me-2 flex-shrink-0"></i>
+                        <div class="small fw-medium" id="registerAlertMessage"></div>
+                    </div>
+
+                    <form id="registerForm">
+                        <div class="mb-3">
+                            <label for="fullName" class="form-label small fw-semibold text-secondary">Full Name</label>
+                            <input type="text" class="form-control" id="fullName" name="full_name" placeholder="e.g. John Doe" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label small fw-semibold text-secondary">College Email Address</label>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="student@university.edu" required>
+                            <div class="form-text small">Use your official college or university domain email.</div>
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-sm-6">
+                                <label for="password" class="form-label small fw-semibold text-secondary">Password</label>
+                                <input type="password" class="form-control" id="password" name="password" placeholder="Min. 6 chars" required minlength="6">
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="confirmPassword" class="form-label small fw-semibold text-secondary">Confirm Password</label>
+                                <input type="password" class="form-control" id="confirmPassword" placeholder="Repeat password" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="department" class="form-label small fw-semibold text-secondary">Academic Department</label>
+                            <select class="form-select" id="department" name="department" required>
+                                <option value="Computer Science & Engineering">Computer Science & Engineering</option>
+                                <option value="Information Technology">Information Technology</option>
+                                <option value="Artificial Intelligence & Data Science">Artificial Intelligence & Data Science</option>
+                                <option value="Electronics & Communication">Electronics & Communication</option>
+                                <option value="Mechanical Engineering">Mechanical Engineering</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold text-secondary">Primary Platform Role</label>
+                            <div class="d-flex gap-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="role" id="roleStudent" value="student" checked>
+                                    <label class="form-check-label small" for="roleStudent">Student (Teammate)</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="role" id="roleTL" value="team_leader">
+                                    <label class="form-check-label small" for="roleTL">Team Leader</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="bio" class="form-label small fw-semibold text-secondary">Short Bio / Technical Interests</label>
+                            <textarea class="form-control" id="bio" name="bio" rows="3" placeholder="Tell potential teammates about your skills, interests, and preferred project types..."></textarea>
+                        </div>
+
+                        <button type="submit" id="submitBtn" class="btn btn-tf-primary w-100 py-2 fs-6 mb-3">
+                            <span>Register & Enter Dashboard</span> <i class="bi bi-arrow-right ms-1"></i>
+                        </button>
+
+                        <div class="text-center text-muted small">
+                            Already have an account? <a href="login.html" class="text-primary fw-semibold text-decoration-none">Sign in here</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap & JS Framework -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script>
+    document.getElementById('registerForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const pwd = document.getElementById('password').value;
+        const confirmPwd = document.getElementById('confirmPassword').value;
+        const alertBox = document.getElementById('registerAlert');
+        const alertMsg = document.getElementById('registerAlertMessage');
+        const submitBtn = document.getElementById('submitBtn');
+
+        if (pwd !== confirmPwd) {
+            alertMsg.textContent = 'Passwords do not match.';
+            alertBox.classList.remove('d-none');
+            return;
+        }
+
+        alertBox.classList.add('d-none');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Creating Account...';
+
+        const data = {
+            full_name: document.getElementById('fullName').value.trim(),
+            email: document.getElementById('email').value.trim(),
+            password: pwd,
+            department: document.getElementById('department').value,
+            role: document.querySelector('input[name="role"]:checked').value,
+            bio: document.getElementById('bio').value.trim()
+        };
+
+        try {
+            const res = await window.api.register(data);
+            if (res.success) {
+                window.tfToast('Account registered successfully!', 'success');
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 500);
+            } else {
+                alertMsg.textContent = res.error || 'Registration failed.';
+                alertBox.classList.remove('d-none');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<span>Register & Enter Dashboard</span> <i class="bi bi-arrow-right ms-1"></i>';
+            }
+        } catch (err) {
+            alertMsg.textContent = 'Connection error. Please try again.';
+            alertBox.classList.remove('d-none');
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<span>Register & Enter Dashboard</span> <i class="bi bi-arrow-right ms-1"></i>';
+        }
+    });
+    </script>
+</body>
+</html>

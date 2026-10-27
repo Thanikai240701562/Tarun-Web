@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kanban Task Board — TeamForge</title>
+    <meta name="description" content="Collaborative Kanban task management board for university hackathons and projects">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap 5 CSS & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <!-- Custom Design System -->
+    <link rel="stylesheet" href="assets/css/main.css">
+    <style>
+        .kanban-col {
+            background-color: #f1f5f9;
+            border-radius: 12px;
+            padding: 1rem;
+            min-height: 520px;
+        }
+        .kanban-card {
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+        .kanban-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.07);
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-wrapper">
+    <div class="sidebar-overlay"></div>
+
+    <!-- Sidebar Navigation -->
+    <aside class="app-sidebar">
+        <div class="sidebar-header">
+            <a href="dashboard.html" class="sidebar-brand text-decoration-none">
+                <div class="brand-icon">
+                    <i class="bi bi-diagram-3-fill"></i>
+                </div>
+                <div>
+                    <span>Team<span style="color:#818cf8;">Forge</span></span>
+                </div>
+            </a>
+        </div>
+
+        <div class="sidebar-menu">
+            <div class="menu-category">Overview</div>
+            <a href="dashboard.html" class="nav-link-custom">
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span>Dashboard</span>
+            </a>
+
+            <div class="menu-category">Collaboration & Events</div>
+            <a href="students.html" class="nav-link-custom">
+                <i class="bi bi-people-fill"></i>
+                <span>Student Directory</span>
+            </a>
+            <a href="events.html" class="nav-link-custom">
+                <i class="bi bi-calendar-event-fill"></i>
+                <span>College Events</span>
+            </a>
+            <a href="teams.html" class="nav-link-custom">
+                <i class="bi bi-folder-fill"></i>
+                <span>My Teams & Projects</span>
+            </a>
+
+            <div class="menu-category">Classical AI Engine</div>
+            <a href="ai-generator.html" class="nav-link-custom">
+                <i class="bi bi-cpu-fill"></i>
+                <span>AI Team Generator</span>
+            </a>
+
+            <div class="menu-category">Team Operations</div>
+            <a href="tasks.html" class="nav-link-custom active">
+                <i class="bi bi-kanban-fill"></i>
+                <span>Task Board</span>
+            </a>
+            <a href="chat.html" class="nav-link-custom">
+                <i class="bi bi-chat-dots-fill"></i>
+                <span>Team Group Chat</span>
+            </a>
+            <a href="sessions.html" class="nav-link-custom">
+                <i class="bi bi-clock-history"></i>
+                <span>Scheduled Sessions</span>
+            </a>
+
+            <div class="menu-category" id="sidebarAdminCategory">Faculty & Admin</div>
+            <a href="admin.html" class="nav-link-custom sidebar-admin-link">
+                <i class="bi bi-shield-lock-fill"></i>
+                <span>Faculty Center & Logs</span>
+            </a>
+        </div>
+
+        <!-- Sidebar Footer -->
+        <div class="sidebar-footer">
+            <div class="d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center gap-2 overflow-hidden">
+                    <div class="avatar-sm bg-primary text-white fw-bold" id="sidebarUserAvatar">A</div>
+                    <div class="text-truncate" style="line-height:1.2;">
+                        <div class="text-white small fw-bold text-truncate" id="sidebarUserName">Aarav Sharma</div>
+                        <div class="text-secondary text-truncate" style="font-size:0.72rem;" id="sidebarUserEmail">aarav.sharma@student.edu</div>
+                    </div>
+                </div>
+                <button type="button" class="btn text-secondary hover-white p-1" title="Sign Out" onclick="window.api.logout()">
+                    <i class="bi bi-box-arrow-right fs-5"></i>
+                </button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="app-main">
+        <header class="app-topbar">
+            <div class="d-flex align-items-center gap-3">
+                <button type="button" class="btn btn-sm btn-light d-lg-none" id="sidebarToggleBtn">
+                    <i class="bi bi-list fs-5"></i>
+                </button>
+                <div class="d-flex align-items-center gap-2">
+                    <h5 class="fw-bold mb-0 text-dark">Project Kanban Board</h5>
+                    <span class="badge bg-secondary-subtle text-secondary">ByteCrafters</span>
+                </div>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+                <button type="button" class="btn btn-sm btn-tf-primary d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#createTaskModal">
+                    <i class="bi bi-plus-circle"></i>
+                    <span>Create Task</span>
+                </button>
+                <a href="profile.html" class="avatar-sm bg-primary text-white fw-bold text-decoration-none" id="topbarUserAvatar">A</a>
+            </div>
+        </header>
+
+        <main class="content-body">
+            <div class="container-fluid px-0">
+                <!-- Kanban Board 4 Columns -->
+                <div class="row g-3">
+                    <!-- Column 1: To Do -->
+                    <div class="col-md-3">
+                        <div class="kanban-col">
+                            <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom">
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="badge bg-secondary text-white rounded-pill" id="countTodo">1</span>
+                                    <h6 class="fw-bold text-dark mb-0">To Do / Backlog</h6>
+                                </div>
+                            </div>
+                            <div id="colTodo">
+                                <!-- Injected by JS -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Column 2: In Progress -->
+                    <div class="col-md-3">
+                        <div class="kanban-col">
+                            <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom">
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="badge bg-primary text-white rounded-pill" id="countInProgress">1</span>
+                                    <h6 class="fw-bold text-dark mb-0">In Progress</h6>
+                                </div>
+                            </div>
+                            <div id="colInProgress">
+                                <!-- Injected by JS -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Column 3: In Review -->
+                    <div class="col-md-3">
+                        <div class="kanban-col">
+                            <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom">
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="badge bg-warning text-dark rounded-pill" id="countReview">1</span>
+                                    <h6 class="fw-bold text-dark mb-0">In Review</h6>
+                                </div>
+                            </div>
+                            <div id="colReview">
+                                <!-- Injected by JS -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Column 4: Completed -->
+                    <div class="col-md-3">
+                        <div class="kanban-col">
+                            <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom">
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="badge bg-success text-white rounded-pill" id="countCompleted">1</span>
+                                    <h6 class="fw-bold text-dark mb-0">Completed</h6>
+                                </div>
+                            </div>
+                            <div id="colCompleted">
+                                <!-- Injected by JS -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<!-- Create Task Modal -->
+<div class="modal fade" id="createTaskModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg">
+            <div class="modal-header border-bottom">
+                <h5 class="modal-title fw-bold">Create New Task</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <form id="createTaskForm">
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold text-muted">Task Title</label>
+                        <input type="text" class="form-control" id="taskTitle" placeholder="e.g. Integrate Chart.js radar metric component" required>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-sm-6">
+                            <label class="form-label small fw-semibold text-muted">Priority</label>
+                            <select class="form-select" id="taskPriority">
+                                <option value="low">Low</option>
+                                <option value="medium" selected>Medium</option>
+                                <option value="high">High</option>
+                                <option value="urgent">Urgent</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="form-label small fw-semibold text-muted">Initial Column</label>
+                            <select class="form-select" id="taskStatus">
+                                <option value="todo">To Do</option>
+                                <option value="in_progress">In Progress</option>
+                                <option value="review">In Review</option>
+                                <option value="completed">Completed</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label small fw-semibold text-muted">Task Description</label>
+                        <textarea class="form-control" id="taskDesc" rows="3" placeholder="Acceptance criteria and deliverables..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-tf-primary w-100 py-2">
+                        <i class="bi bi-plus-circle me-1"></i> Add Task to Board
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap & JS Framework -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/main.js"></script>
+<script>
+async function loadTasks() {
+    try {
+        const res = await window.api.getTasks(1);
+        if (res.success && res.tasks) {
+            const cols = {
+                todo: document.getElementById('colTodo'),
+                in_progress: document.getElementById('colInProgress'),
+                review: document.getElementById('colReview'),
+                completed: document.getElementById('colCompleted')
+            };
+
+            const counts = { todo: 0, in_progress: 0, review: 0, completed: 0 };
+            Object.values(cols).forEach(c => c.innerHTML = '');
+
+            res.tasks.forEach(t => {
+                const status = t.status || 'todo';
+                if (counts[status] !== undefined) counts[status]++;
+
+                const prioClass = t.priority === 'urgent' ? 'bg-danger' : (t.priority === 'high' ? 'bg-warning text-dark' : 'bg-primary-subtle text-primary');
+
+                const cardHtml = `
+                    <div class="kanban-card">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <span class="badge ${prioClass} text-uppercase" style="font-size:0.65rem;">${t.priority || 'medium'}</span>
+                            <div class="dropdown">
+                                <button class="btn btn-sm btn-link text-muted p-0" type="button" data-bs-toggle="dropdown">
+                                    <i class="bi bi-three-dots"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end small">
+                                    <li><button class="dropdown-item" onclick="moveTask(${t.id}, 'todo')">Move to To Do</button></li>
+                                    <li><button class="dropdown-item" onclick="moveTask(${t.id}, 'in_progress')">Move to In Progress</button></li>
+                                    <li><button class="dropdown-item" onclick="moveTask(${t.id}, 'review')">Move to Review</button></li>
+                                    <li><button class="dropdown-item" onclick="moveTask(${t.id}, 'completed')">Move to Completed</button></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <h6 class="fw-bold text-dark small mb-1">${t.title}</h6>
+                        <p class="text-muted small mb-3" style="font-size:0.75rem;line-height:1.4;">${t.description || ''}</p>
+
+                        <div class="d-flex align-items-center justify-content-between pt-2 border-top small" style="font-size:0.72rem;">
+                            <span class="text-secondary"><i class="bi bi-person me-1"></i>${t.assignees || 'Aarav Sharma'}</span>
+                            <span class="text-muted"><i class="bi bi-clock me-1"></i>${t.due_date ? t.due_date.substring(5) : 'Oct 20'}</span>
+                        </div>
+                    </div>
+                `;
+
+                if (cols[status]) {
+                    cols[status].insertAdjacentHTML('beforeend', cardHtml);
+                }
+            });
+
+            document.getElementById('countTodo').textContent = counts.todo;
+            document.getElementById('countInProgress').textContent = counts.in_progress;
+            document.getElementById('countReview').textContent = counts.review;
+            document.getElementById('countCompleted').textContent = counts.completed;
+        }
+    } catch (e) {
+        console.warn('Failed to load tasks:', e);
+    }
+}
+
+async function moveTask(taskId, newStatus) {
+    try {
+        const res = await window.api.updateTaskStatus(taskId, newStatus);
+        window.tfToast('Task moved!', 'success');
+        loadTasks();
+    } catch (e) {
+        window.tfToast('Failed to update task', 'error');
+    }
+}
+
+document.getElementById('createTaskForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const data = {
+        team_id: 1,
+        title: document.getElementById('taskTitle').value.trim(),
+        priority: document.getElementById('taskPriority').value,
+        status: document.getElementById('taskStatus').value,
+        description: document.getElementById('taskDesc').value.trim()
+    };
+
+    try {
+        const res = await window.api.createTask(data);
+        bootstrap.Modal.getInstance(document.getElementById('createTaskModal')).hide();
+        window.tfToast(res.message || 'Task added!', 'success');
+        document.getElementById('taskTitle').value = '';
+        document.getElementById('taskDesc').value = '';
+        loadTasks();
+    } catch (err) {
+        window.tfToast('Failed to create task', 'error');
+    }
+});
+
+document.addEventListener('DOMContentLoaded', loadTasks);
+</script>
+</body>
+</html>

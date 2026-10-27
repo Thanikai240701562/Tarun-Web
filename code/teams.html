@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Teams & Projects — TeamForge</title>
+    <meta name="description" content="Manage your active college hackathon and course teams">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap 5 CSS & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <!-- Custom Design System -->
+    <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+
+<div class="app-wrapper">
+    <div class="sidebar-overlay"></div>
+
+    <!-- Sidebar Navigation -->
+    <aside class="app-sidebar">
+        <div class="sidebar-header">
+            <a href="dashboard.html" class="sidebar-brand text-decoration-none">
+                <div class="brand-icon">
+                    <i class="bi bi-diagram-3-fill"></i>
+                </div>
+                <div>
+                    <span>Team<span style="color:#818cf8;">Forge</span></span>
+                </div>
+            </a>
+        </div>
+
+        <div class="sidebar-menu">
+            <div class="menu-category">Overview</div>
+            <a href="dashboard.html" class="nav-link-custom">
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span>Dashboard</span>
+            </a>
+
+            <div class="menu-category">Collaboration & Events</div>
+            <a href="students.html" class="nav-link-custom">
+                <i class="bi bi-people-fill"></i>
+                <span>Student Directory</span>
+            </a>
+            <a href="events.html" class="nav-link-custom">
+                <i class="bi bi-calendar-event-fill"></i>
+                <span>College Events</span>
+            </a>
+            <a href="teams.html" class="nav-link-custom active">
+                <i class="bi bi-folder-fill"></i>
+                <span>My Teams & Projects</span>
+            </a>
+
+            <div class="menu-category">Classical AI Engine</div>
+            <a href="ai-generator.html" class="nav-link-custom">
+                <i class="bi bi-cpu-fill"></i>
+                <span>AI Team Generator</span>
+            </a>
+
+            <div class="menu-category">Team Operations</div>
+            <a href="tasks.html" class="nav-link-custom">
+                <i class="bi bi-kanban-fill"></i>
+                <span>Task Board</span>
+            </a>
+            <a href="chat.html" class="nav-link-custom">
+                <i class="bi bi-chat-dots-fill"></i>
+                <span>Team Group Chat</span>
+            </a>
+            <a href="sessions.html" class="nav-link-custom">
+                <i class="bi bi-clock-history"></i>
+                <span>Scheduled Sessions</span>
+            </a>
+
+            <div class="menu-category" id="sidebarAdminCategory">Faculty & Admin</div>
+            <a href="admin.html" class="nav-link-custom sidebar-admin-link">
+                <i class="bi bi-shield-lock-fill"></i>
+                <span>Faculty Center & Logs</span>
+            </a>
+        </div>
+
+        <!-- Sidebar Footer -->
+        <div class="sidebar-footer">
+            <div class="d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center gap-2 overflow-hidden">
+                    <div class="avatar-sm bg-primary text-white fw-bold" id="sidebarUserAvatar">A</div>
+                    <div class="text-truncate" style="line-height:1.2;">
+                        <div class="text-white small fw-bold text-truncate" id="sidebarUserName">Aarav Sharma</div>
+                        <div class="text-secondary text-truncate" style="font-size:0.72rem;" id="sidebarUserEmail">aarav.sharma@student.edu</div>
+                    </div>
+                </div>
+                <button type="button" class="btn text-secondary hover-white p-1" title="Sign Out" onclick="window.api.logout()">
+                    <i class="bi bi-box-arrow-right fs-5"></i>
+                </button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="app-main">
+        <header class="app-topbar">
+            <div class="d-flex align-items-center gap-3">
+                <button type="button" class="btn btn-sm btn-light d-lg-none" id="sidebarToggleBtn">
+                    <i class="bi bi-list fs-5"></i>
+                </button>
+                <h5 class="fw-bold mb-0 text-dark">My Teams & Projects</h5>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+                <button type="button" class="btn btn-sm btn-tf-primary d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#createTeamModal">
+                    <i class="bi bi-plus-circle"></i>
+                    <span>Create New Team</span>
+                </button>
+                <a href="profile.html" class="avatar-sm bg-primary text-white fw-bold text-decoration-none" id="topbarUserAvatar">A</a>
+            </div>
+        </header>
+
+        <main class="content-body">
+            <div class="container-fluid px-0">
+                <div class="row g-4" id="teamsListContainer">
+                    <div class="col-12 text-center py-5">
+                        <div class="spinner-border text-primary" role="status"></div>
+                        <div class="text-muted small mt-2">Loading teams...</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<!-- Create Team Modal -->
+<div class="modal fade" id="createTeamModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow-lg">
+            <div class="modal-header border-bottom">
+                <h5 class="modal-title fw-bold">Form New Team & Project</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <form id="createTeamForm">
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-semibold text-muted">Team Name</label>
+                            <input type="text" class="form-control" id="tmName" placeholder="e.g. ByteCrafters" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-semibold text-muted">Target Event / Hackathon</label>
+                            <select class="form-select" id="tmEvent">
+                                <option value="1">Inter-College AI & Web Hackathon 2026</option>
+                                <option value="2">Discrete Optimization Challenge</option>
+                                <option value="3">Annual Capstone Showcase</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold text-muted">Project Title</label>
+                        <input type="text" class="form-control" id="tmProjectTitle" placeholder="e.g. Autonomous Route Planner using CSP" required>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-semibold text-muted">Min Team Size</label>
+                            <input type="number" class="form-control" id="tmMin" value="3" min="1" max="8">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-semibold text-muted">Max Team Size</label>
+                            <input type="number" class="form-control" id="tmMax" value="4" min="1" max="8">
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label small fw-semibold text-muted">Project Description</label>
+                        <textarea class="form-control" id="tmDesc" rows="3" placeholder="Explain the project scope and technical goals..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-tf-primary w-100 py-2">
+                        <i class="bi bi-people-fill me-1"></i> Form Team
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap & JS Framework -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/main.js"></script>
+<script>
+async function loadTeams() {
+    const container = document.getElementById('teamsListContainer');
+    try {
+        const res = await window.api.getTeams();
+        if (res.success && res.teams) {
+            container.innerHTML = res.teams.map(t => {
+                const members = Array.isArray(t.members) ? t.members : [];
+                const membersHtml = members.map(m => `
+                    <div class="d-flex align-items-center justify-content-between p-2 rounded bg-light border mb-2 small">
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="avatar-sm bg-primary text-white fw-bold">${(m.full_name || m.name || 'M').charAt(0)}</div>
+                            <div>
+                                <div class="fw-bold text-dark">${m.full_name || m.name}</div>
+                                <div class="text-muted" style="font-size:0.75rem;">${m.email || ''}</div>
+                            </div>
+                        </div>
+                        <span class="badge bg-white text-secondary border">${m.assigned_role || m.role || 'Member'}</span>
+                    </div>
+                `).join('');
+
+                const missingSkillsHtml = (t.missing_skills && t.missing_skills.length > 0)
+                    ? `<div class="alert alert-warning py-2 px-3 small d-flex align-items-center justify-content-between mb-3">
+                         <div><strong>Skill Gap:</strong> ${t.missing_skills.join(', ')}</div>
+                         <a href="ai-generator.html" class="btn btn-sm btn-dark">AI Match &rarr;</a>
+                       </div>`
+                    : '';
+
+                return `
+                    <div class="col-lg-6">
+                        <div class="card-tf p-4 border bg-white h-100 d-flex flex-column">
+                            <div class="d-flex align-items-start justify-content-between mb-2">
+                                <div>
+                                    <span class="badge bg-primary-subtle text-primary fw-bold text-uppercase" style="font-size:0.7rem;">Team</span>
+                                    <h4 class="fw-bold text-dark mb-0">${t.name}</h4>
+                                </div>
+                                <span class="badge bg-success-subtle text-success text-capitalize">${t.status || 'Active'}</span>
+                            </div>
+
+                            <div class="fw-semibold text-secondary small mb-2">${t.project_title || 'Collegiate Project'}</div>
+                            <p class="text-muted small mb-3">${t.description || 'Dedicated student development team.'}</p>
+
+                            ${missingSkillsHtml}
+
+                            <div class="mb-3">
+                                <h6 class="fw-bold text-dark small mb-2">Team Members (${members.length}/${t.max_size || 4}):</h6>
+                                ${membersHtml}
+                            </div>
+
+                            <div class="d-flex align-items-center gap-2 pt-3 border-top mt-auto">
+                                <a href="tasks.html?team_id=${t.id}" class="btn btn-sm btn-outline-secondary flex-fill">
+                                    <i class="bi bi-kanban me-1"></i> Task Board
+                                </a>
+                                <a href="chat.html?team_id=${t.id}" class="btn btn-sm btn-outline-primary flex-fill">
+                                    <i class="bi bi-chat-dots me-1"></i> Ephemeral Chat
+                                </a>
+                                <a href="ai-generator.html" class="btn btn-sm btn-tf-primary" title="AI Team Optimizer">
+                                    <i class="bi bi-cpu-fill"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+    } catch (e) {
+        container.innerHTML = '<div class="col-12 text-center py-5 text-danger">Failed to load teams.</div>';
+    }
+}
+
+document.getElementById('createTeamForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const data = {
+        name: document.getElementById('tmName').value.trim(),
+        event_id: document.getElementById('tmEvent').value,
+        project_title: document.getElementById('tmProjectTitle').value.trim(),
+        min_size: document.getElementById('tmMin').value,
+        max_size: document.getElementById('tmMax').value,
+        description: document.getElementById('tmDesc').value.trim()
+    };
+
+    try {
+        const res = await window.api.createTeam(data);
+        bootstrap.Modal.getInstance(document.getElementById('createTeamModal')).hide();
+        window.tfToast(res.message || 'Team created successfully!', 'success');
+        loadTeams();
+    } catch (err) {
+        window.tfToast('Failed to create team', 'error');
+    }
+});
+
+document.addEventListener('DOMContentLoaded', loadTeams);
+</script>
+</body>
+</html>

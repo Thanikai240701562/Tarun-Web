@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scheduled Sessions — TeamForge</title>
+    <meta name="description" content="Schedule and manage team standups and faculty mentor checkpoints">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap 5 CSS & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <!-- Custom Design System -->
+    <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+
+<div class="app-wrapper">
+    <div class="sidebar-overlay"></div>
+
+    <!-- Sidebar Navigation -->
+    <aside class="app-sidebar">
+        <div class="sidebar-header">
+            <a href="dashboard.html" class="sidebar-brand text-decoration-none">
+                <div class="brand-icon">
+                    <i class="bi bi-diagram-3-fill"></i>
+                </div>
+                <div>
+                    <span>Team<span style="color:#818cf8;">Forge</span></span>
+                </div>
+            </a>
+        </div>
+
+        <div class="sidebar-menu">
+            <div class="menu-category">Overview</div>
+            <a href="dashboard.html" class="nav-link-custom">
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span>Dashboard</span>
+            </a>
+
+            <div class="menu-category">Collaboration & Events</div>
+            <a href="students.html" class="nav-link-custom">
+                <i class="bi bi-people-fill"></i>
+                <span>Student Directory</span>
+            </a>
+            <a href="events.html" class="nav-link-custom">
+                <i class="bi bi-calendar-event-fill"></i>
+                <span>College Events</span>
+            </a>
+            <a href="teams.html" class="nav-link-custom">
+                <i class="bi bi-folder-fill"></i>
+                <span>My Teams & Projects</span>
+            </a>
+
+            <div class="menu-category">Classical AI Engine</div>
+            <a href="ai-generator.html" class="nav-link-custom">
+                <i class="bi bi-cpu-fill"></i>
+                <span>AI Team Generator</span>
+            </a>
+
+            <div class="menu-category">Team Operations</div>
+            <a href="tasks.html" class="nav-link-custom">
+                <i class="bi bi-kanban-fill"></i>
+                <span>Task Board</span>
+            </a>
+            <a href="chat.html" class="nav-link-custom">
+                <i class="bi bi-chat-dots-fill"></i>
+                <span>Team Group Chat</span>
+            </a>
+            <a href="sessions.html" class="nav-link-custom active">
+                <i class="bi bi-clock-history"></i>
+                <span>Scheduled Sessions</span>
+            </a>
+
+            <div class="menu-category" id="sidebarAdminCategory">Faculty & Admin</div>
+            <a href="admin.html" class="nav-link-custom sidebar-admin-link">
+                <i class="bi bi-shield-lock-fill"></i>
+                <span>Faculty Center & Logs</span>
+            </a>
+        </div>
+
+        <div class="sidebar-footer">
+            <div class="d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center gap-2 overflow-hidden">
+                    <div class="avatar-sm bg-primary text-white fw-bold" id="sidebarUserAvatar">A</div>
+                    <div class="text-truncate" style="line-height:1.2;">
+                        <div class="text-white small fw-bold text-truncate" id="sidebarUserName">Aarav Sharma</div>
+                        <div class="text-secondary text-truncate" style="font-size:0.72rem;" id="sidebarUserEmail">aarav.sharma@student.edu</div>
+                    </div>
+                </div>
+                <button type="button" class="btn text-secondary hover-white p-1" title="Sign Out" onclick="window.api.logout()">
+                    <i class="bi bi-box-arrow-right fs-5"></i>
+                </button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="app-main">
+        <header class="app-topbar">
+            <div class="d-flex align-items-center gap-3">
+                <button type="button" class="btn btn-sm btn-light d-lg-none" id="sidebarToggleBtn">
+                    <i class="bi bi-list fs-5"></i>
+                </button>
+                <h5 class="fw-bold mb-0 text-dark">Scheduled Sessions & Standups</h5>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+                <button type="button" class="btn btn-sm btn-tf-primary d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#createSessionModal">
+                    <i class="bi bi-calendar-plus"></i>
+                    <span>Schedule Session</span>
+                </button>
+                <a href="profile.html" class="avatar-sm bg-primary text-white fw-bold text-decoration-none" id="topbarUserAvatar">A</a>
+            </div>
+        </header>
+
+        <main class="content-body">
+            <div class="container-fluid px-0">
+                <div class="row g-4" id="sessionsListContainer">
+                    <div class="col-12 text-center py-5">
+                        <div class="spinner-border text-primary" role="status"></div>
+                        <div class="text-muted small mt-2">Loading sessions...</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<!-- Schedule Session Modal -->
+<div class="modal fade" id="createSessionModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg">
+            <div class="modal-header border-bottom">
+                <h5 class="modal-title fw-bold">Schedule Standup / Mentor Session</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body p-4">
+                <form id="createSessionForm">
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold text-muted">Session Title</label>
+                        <input type="text" class="form-control" id="sessTitle" placeholder="e.g. Sprint 2 CSP Verification Standup" required>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-sm-6">
+                            <label class="form-label small fw-semibold text-muted">Date & Time</label>
+                            <input type="datetime-local" class="form-control" id="sessStartTime" required>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="form-label small fw-semibold text-muted">Duration (Minutes)</label>
+                            <input type="number" class="form-control" id="sessDuration" value="45" min="15" max="180">
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold text-muted">Meeting Room URL</label>
+                        <input type="url" class="form-control" id="sessUrl" value="https://meet.google.com/tf-demo-standup">
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label small fw-semibold text-muted">Session Agenda</label>
+                        <textarea class="form-control" id="sessDesc" rows="3" placeholder="Topics to cover, milestone deliverables to review..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-tf-primary w-100 py-2">
+                        <i class="bi bi-calendar-check me-1"></i> Confirm & Schedule Session
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap & JS Framework -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/main.js"></script>
+<script>
+async function loadSessions() {
+    const container = document.getElementById('sessionsListContainer');
+    try {
+        const res = await window.api.getSessions();
+        if (res.success && res.sessions) {
+            container.innerHTML = res.sessions.map(s => {
+                const dateStr = new Date(s.start_time).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' });
+
+                return `
+                    <div class="col-md-6">
+                        <div class="card-tf p-4 border bg-white h-100 d-flex flex-column">
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <span class="badge bg-primary-subtle text-primary font-mono" style="font-size:0.7rem;">${s.team_name || 'Team'}</span>
+                                <span class="badge bg-success-subtle text-success text-capitalize">${s.status || 'Scheduled'}</span>
+                            </div>
+
+                            <h5 class="fw-bold text-dark mb-2">${s.title}</h5>
+                            <p class="text-muted small mb-3 flex-grow-1">${s.description || 'Collegiate team collaboration session.'}</p>
+
+                            <div class="p-3 bg-light rounded-3 border mb-3 small">
+                                <div class="d-flex justify-content-between mb-1">
+                                    <span class="text-muted"><i class="bi bi-calendar3 me-1"></i> Time:</span>
+                                    <span class="fw-bold text-dark">${dateStr}</span>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span class="text-muted"><i class="bi bi-stopwatch me-1"></i> Duration:</span>
+                                    <span class="fw-bold text-dark">${s.duration_minutes || 45} mins</span>
+                                </div>
+                            </div>
+
+                            <div class="d-flex align-items-center justify-content-between pt-2 border-top mt-auto">
+                                <span class="text-muted small">Host: ${s.creator_name || 'Aarav'}</span>
+                                <a href="${s.meeting_url || '#'}" target="_blank" class="btn btn-sm btn-tf-primary">
+                                    <i class="bi bi-camera-video me-1"></i> Join Session
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+    } catch (e) {
+        container.innerHTML = '<div class="col-12 text-center py-5 text-danger">Failed to load sessions.</div>';
+    }
+}
+
+document.getElementById('createSessionForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const data = {
+        team_id: 1,
+        title: document.getElementById('sessTitle').value.trim(),
+        start_time: document.getElementById('sessStartTime').value,
+        duration_minutes: document.getElementById('sessDuration').value,
+        meeting_url: document.getElementById('sessUrl').value.trim(),
+        description: document.getElementById('sessDesc').value.trim()
+    };
+
+    try {
+        const res = await window.api.createSession(data);
+        bootstrap.Modal.getInstance(document.getElementById('createSessionModal')).hide();
+        window.tfToast(res.message || 'Session scheduled!', 'success');
+        loadSessions();
+    } catch (err) {
+        window.tfToast('Failed to schedule session', 'error');
+    }
+});
+
+document.addEventListener('DOMContentLoaded', loadSessions);
+</script>
+</body>
+</html>

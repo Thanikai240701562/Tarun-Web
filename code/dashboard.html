@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard — TeamForge</title>
+    <meta name="description" content="Role-Aware Student Dashboard for TeamForge">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap 5 CSS & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <!-- Custom Design System -->
+    <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+
+<div class="app-wrapper">
+    <div class="sidebar-overlay"></div>
+
+    <!-- Sidebar Navigation -->
+    <aside class="app-sidebar">
+        <div class="sidebar-header">
+            <a href="dashboard.html" class="sidebar-brand text-decoration-none">
+                <div class="brand-icon">
+                    <i class="bi bi-diagram-3-fill"></i>
+                </div>
+                <div>
+                    <span>Team<span style="color:#818cf8;">Forge</span></span>
+                </div>
+            </a>
+        </div>
+
+        <div class="sidebar-menu">
+            <div class="menu-category">Overview</div>
+            <a href="dashboard.html" class="nav-link-custom active">
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span>Dashboard</span>
+            </a>
+
+            <div class="menu-category">Collaboration & Events</div>
+            <a href="students.html" class="nav-link-custom">
+                <i class="bi bi-people-fill"></i>
+                <span>Student Directory</span>
+            </a>
+            <a href="events.html" class="nav-link-custom">
+                <i class="bi bi-calendar-event-fill"></i>
+                <span>College Events</span>
+            </a>
+            <a href="teams.html" class="nav-link-custom">
+                <i class="bi bi-folder-fill"></i>
+                <span>My Teams & Projects</span>
+            </a>
+
+            <div class="menu-category">Classical AI Engine</div>
+            <a href="ai-generator.html" class="nav-link-custom">
+                <i class="bi bi-cpu-fill"></i>
+                <span>AI Team Generator</span>
+            </a>
+
+            <div class="menu-category">Team Operations</div>
+            <a href="tasks.html" class="nav-link-custom">
+                <i class="bi bi-kanban-fill"></i>
+                <span>Task Board</span>
+            </a>
+            <a href="chat.html" class="nav-link-custom">
+                <i class="bi bi-chat-dots-fill"></i>
+                <span>Team Group Chat</span>
+            </a>
+            <a href="sessions.html" class="nav-link-custom">
+                <i class="bi bi-clock-history"></i>
+                <span>Scheduled Sessions</span>
+            </a>
+
+            <div class="menu-category" id="sidebarAdminCategory">Faculty & Admin</div>
+            <a href="admin.html" class="nav-link-custom sidebar-admin-link">
+                <i class="bi bi-shield-lock-fill"></i>
+                <span>Faculty Center & Logs</span>
+            </a>
+        </div>
+
+        <!-- Sidebar Bottom Profile Card -->
+        <div class="sidebar-footer">
+            <div class="d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center gap-2 overflow-hidden">
+                    <div class="avatar-sm bg-primary text-white fw-bold" id="sidebarUserAvatar">A</div>
+                    <div class="text-truncate" style="line-height:1.2;">
+                        <div class="text-white small fw-bold text-truncate" id="sidebarUserName">Aarav Sharma</div>
+                        <div class="text-secondary text-truncate" style="font-size:0.72rem;" id="sidebarUserEmail">aarav.sharma@student.edu</div>
+                    </div>
+                </div>
+                <button type="button" class="btn text-secondary hover-white p-1" title="Sign Out" onclick="window.api.logout()">
+                    <i class="bi bi-box-arrow-right fs-5"></i>
+                </button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="app-main">
+        <!-- Topbar Navbar -->
+        <header class="app-topbar">
+            <div class="d-flex align-items-center gap-3">
+                <button type="button" class="btn btn-sm btn-light d-lg-none" id="sidebarToggleBtn" aria-label="Toggle Navigation">
+                    <i class="bi bi-list fs-5"></i>
+                </button>
+                <div class="topbar-search d-none d-md-block">
+                    <i class="bi bi-search search-icon"></i>
+                    <input type="text" class="form-control" placeholder="Search students, skills, projects..." onkeydown="if(event.key==='Enter') location.href='students.html?q='+encodeURIComponent(this.value)">
+                </div>
+            </div>
+
+            <div class="d-flex align-items-center gap-3">
+                <a href="ai-generator.html" class="btn btn-sm btn-tf-primary d-none d-sm-inline-flex align-items-center gap-2">
+                    <i class="bi bi-cpu-fill"></i>
+                    <span>AI Team Generator</span>
+                </a>
+
+                <a href="notifications.html" class="btn btn-sm btn-light position-relative p-2 rounded-circle" title="Notifications">
+                    <i class="bi bi-bell fs-5 text-secondary"></i>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="notifBadge" style="font-size:0.68rem; display:none;">1</span>
+                </a>
+
+                <a href="profile.html" class="avatar-sm bg-primary text-white fw-bold text-decoration-none" id="topbarUserAvatar">A</a>
+            </div>
+        </header>
+
+        <!-- Main Page Body -->
+        <main class="content-body">
+            <div class="container-fluid px-0">
+                <!-- Welcome Banner -->
+                <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+                    <div>
+                        <h3 class="fw-bold text-dark mb-1">Welcome back, <span id="welcomeUserName">Aarav</span>! 👋</h3>
+                        <p class="text-muted mb-0 small" id="welcomeUserSub">Leading ByteCrafters · Computer Science & Engineering</p>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <a href="events.html" class="btn btn-white border btn-sm d-flex align-items-center gap-1 shadow-sm">
+                            <i class="bi bi-calendar-event text-secondary"></i> Explore Events
+                        </a>
+                        <a href="ai-generator.html" class="btn btn-tf-primary btn-sm d-flex align-items-center gap-1 shadow-sm">
+                            <i class="bi bi-cpu-fill"></i> AI Team Generator
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 4 Metrics Row -->
+                <div class="row g-3 mb-4">
+                    <div class="col-sm-6 col-xl-3">
+                        <div class="card-tf p-3 bg-white border">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <div class="text-muted small fw-semibold text-uppercase" style="font-size:0.75rem;">My Active Teams</div>
+                                    <div class="fs-3 fw-bold text-dark mt-1" id="statTeams">1</div>
+                                    <div class="small text-success fw-medium mt-1"><i class="bi bi-shield-check"></i> Primary: ByteCrafters</div>
+                                </div>
+                                <div class="brand-icon bg-primary-subtle text-primary" style="width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;">
+                                    <i class="bi bi-folder-fill"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-xl-3">
+                        <div class="card-tf p-3 bg-white border">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <div class="text-muted small fw-semibold text-uppercase" style="font-size:0.75rem;">Registered Events</div>
+                                    <div class="fs-3 fw-bold text-dark mt-1" id="statEvents">1</div>
+                                    <div class="small text-info fw-medium mt-1"><i class="bi bi-check2-circle"></i> Hackathon Registered</div>
+                                </div>
+                                <div class="brand-icon bg-info-subtle text-info" style="width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;">
+                                    <i class="bi bi-calendar-check-fill"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-xl-3">
+                        <div class="card-tf p-3 bg-white border">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <div class="text-muted small fw-semibold text-uppercase" style="font-size:0.75rem;">Pending Invitations</div>
+                                    <div class="fs-3 fw-bold text-dark mt-1" id="statInvites">1</div>
+                                    <div class="small text-warning fw-medium mt-1"><i class="bi bi-clock-history"></i> Awaiting review</div>
+                                </div>
+                                <div class="brand-icon bg-warning-subtle text-warning" style="width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;">
+                                    <i class="bi bi-envelope-paper-fill"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-xl-3">
+                        <div class="card-tf p-3 bg-white border">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <div class="text-muted small fw-semibold text-uppercase" style="font-size:0.75rem;">Assigned Tasks</div>
+                                    <div class="fs-3 fw-bold text-dark mt-1" id="statTasks">3</div>
+                                    <div class="small text-secondary fw-medium mt-1"><i class="bi bi-kanban"></i> Sprint Kanban</div>
+                                </div>
+                                <div class="brand-icon bg-purple text-white" style="width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;background:#7c3aed;">
+                                    <i class="bi bi-check2-square"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Primary Active Team & Invitations Row -->
+                <div class="row g-4 mb-4">
+                    <!-- Left: Primary Team Details -->
+                    <div class="col-lg-8">
+                        <div class="card-tf bg-white border p-4 mb-4">
+                            <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 pb-3 border-bottom mb-3">
+                                <div>
+                                    <span class="badge bg-primary-subtle text-primary fw-bold mb-1">Primary Active Team</span>
+                                    <h4 class="fw-bold text-dark mb-0" id="primaryTeamName">ByteCrafters</h4>
+                                </div>
+                                <div class="d-flex gap-2">
+                                    <a href="tasks.html" class="btn btn-sm btn-outline-secondary">
+                                        <i class="bi bi-kanban me-1"></i> Task Board
+                                    </a>
+                                    <a href="chat.html" class="btn btn-sm btn-outline-primary">
+                                        <i class="bi bi-chat-dots me-1"></i> Team Chat
+                                    </a>
+                                </div>
+                            </div>
+
+                            <p class="text-muted small mb-3" id="primaryTeamDesc">
+                                Building an intelligent team-formation platform using pure server-side CSP algorithms, responsive modern UI, and ephemeral chat.
+                            </p>
+
+                            <!-- Missing Skills Alert -->
+                            <div class="alert alert-warning d-flex align-items-center justify-content-between p-3 rounded-3 mb-4" id="missingSkillsAlert">
+                                <div class="d-flex align-items-center gap-2">
+                                    <i class="bi bi-exclamation-triangle-fill fs-5 flex-shrink-0 text-warning"></i>
+                                    <div class="small">
+                                        <strong>Skill Gap Detected:</strong> Team lacks <span class="badge bg-warning text-dark" id="missingSkillsTags">Graph Algorithms & CSP</span>
+                                    </div>
+                                </div>
+                                <a href="ai-generator.html" class="btn btn-sm btn-dark">AI Replacement &rarr;</a>
+                            </div>
+
+                            <!-- Team Member Roster -->
+                            <h6 class="fw-bold text-dark mb-3">Active Member Roster</h6>
+                            <div class="table-responsive">
+                                <table class="table align-middle table-hover border small mb-0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Member</th>
+                                            <th>Role</th>
+                                            <th>Department</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="primaryTeamMembersTable">
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <div class="avatar-sm bg-primary text-white fw-bold">A</div>
+                                                    <div>
+                                                        <div class="fw-bold text-dark">Aarav Sharma</div>
+                                                        <div class="text-muted" style="font-size:0.75rem;">aarav.sharma@student.edu</div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td><span class="badge bg-primary-subtle text-primary">Team Leader / Fullstack</span></td>
+                                            <td>CSE</td>
+                                            <td><span class="badge bg-success-subtle text-success">Active</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <div class="avatar-sm bg-info text-white fw-bold">R</div>
+                                                    <div>
+                                                        <div class="fw-bold text-dark">Rohan Verma</div>
+                                                        <div class="text-muted" style="font-size:0.75rem;">rohan.verma@student.edu</div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td><span class="badge bg-light text-dark border">Frontend Developer</span></td>
+                                            <td>CSE</td>
+                                            <td><span class="badge bg-success-subtle text-success">Active</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <div class="avatar-sm bg-success text-white fw-bold">V</div>
+                                                    <div>
+                                                        <div class="fw-bold text-dark">Vikram Nair</div>
+                                                        <div class="text-muted" style="font-size:0.75rem;">vikram.nair@student.edu</div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td><span class="badge bg-light text-dark border">Database Architect</span></td>
+                                            <td>CSE</td>
+                                            <td><span class="badge bg-success-subtle text-success">Active</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Active College Events Spotlight -->
+                        <div class="card-tf bg-white border p-4">
+                            <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom">
+                                <h5 class="fw-bold text-dark mb-0">Upcoming College Events & Hackathons</h5>
+                                <a href="events.html" class="small fw-semibold text-primary text-decoration-none">View All &rarr;</a>
+                            </div>
+
+                            <div class="row g-3" id="activeEventsList">
+                                <div class="col-md-6">
+                                    <div class="p-3 border rounded-3 bg-light h-100">
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <span class="badge bg-success-subtle text-success fw-bold">Registration Open</span>
+                                            <span class="small text-muted font-mono"><i class="bi bi-calendar3"></i> Nov 15</span>
+                                        </div>
+                                        <h6 class="fw-bold text-dark mt-2 mb-1">Inter-College AI & Web Hackathon 2026</h6>
+                                        <p class="text-muted small mb-2">36-hour hackathon focused on Classical AI algorithms and web systems.</p>
+                                        <div class="d-flex justify-content-between align-items-center mt-3 pt-2 border-top">
+                                            <span class="small text-muted"><i class="bi bi-people me-1"></i> 84 registered</span>
+                                            <a href="events.html" class="btn btn-sm btn-tf-primary">View</a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="p-3 border rounded-3 bg-light h-100">
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <span class="badge bg-success-subtle text-success fw-bold">Registration Open</span>
+                                            <span class="small text-muted font-mono"><i class="bi bi-calendar3"></i> Dec 05</span>
+                                        </div>
+                                        <h6 class="fw-bold text-dark mt-2 mb-1">Discrete Optimization Challenge</h6>
+                                        <p class="text-muted small mb-2">Solve NP-hard scheduling and CSP graph coloring challenges.</p>
+                                        <div class="d-flex justify-content-between align-items-center mt-3 pt-2 border-top">
+                                            <span class="small text-muted"><i class="bi bi-people me-1"></i> 42 registered</span>
+                                            <a href="events.html" class="btn btn-sm btn-tf-primary">View</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Pending Invites & Classical AI Info -->
+                    <div class="col-lg-4">
+                        <!-- Pending Invitations Card -->
+                        <div class="card-tf bg-white border p-4 mb-4">
+                            <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom">
+                                <h6 class="fw-bold text-dark mb-0">Team Invitations</h6>
+                                <span class="badge bg-warning-subtle text-warning" id="pendingInvitesBadge">1 Pending</span>
+                            </div>
+
+                            <div id="pendingInvitesContainer">
+                                <div class="p-3 border rounded-3 bg-light mb-3">
+                                    <div class="d-flex align-items-center justify-content-between mb-2">
+                                        <span class="fw-bold text-dark small">AlgoKnights</span>
+                                        <span class="small text-muted" style="font-size:0.7rem;">2h ago</span>
+                                    </div>
+                                    <p class="text-muted small mb-2">Priya Patel invited you to join as <strong>Backend Optimization Lead</strong>.</p>
+                                    <div class="d-flex gap-2">
+                                        <button type="button" class="btn btn-sm btn-success flex-fill" onclick="respondInvite(101, 'accepted')">Accept</button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary flex-fill" onclick="respondInvite(101, 'declined')">Decline</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Classical AI Info Box -->
+                        <div class="card-tf p-4 border bg-navy text-white" style="background:#0f172a;">
+                            <div class="d-flex align-items-center gap-2 mb-3">
+                                <i class="bi bi-stars text-warning fs-5"></i>
+                                <h6 class="fw-bold mb-0 text-white">Classical AI Matchmaker</h6>
+                            </div>
+                            <p class="text-secondary small mb-3">
+                                Need complementary members? The CSP Backtracking engine uses Minimum Remaining Values (MRV) to find available teammates who cover your missing skill set.
+                            </p>
+                            <a href="ai-generator.html" class="btn btn-sm btn-tf-primary w-100 py-2">
+                                Run Team Generator &rarr;
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<!-- Bootstrap & JS Framework -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/main.js"></script>
+<script>
+async function loadDashboard() {
+    try {
+        const data = await window.api.getDashboard();
+        if (data.success) {
+            // Update metrics
+            if (data.metrics) {
+                document.getElementById('statTeams').textContent = data.metrics.teams_count || 0;
+                document.getElementById('statEvents').textContent = data.metrics.events_count || 0;
+                document.getElementById('statInvites').textContent = data.metrics.pending_invites_count || 0;
+                document.getElementById('statTasks').textContent = data.metrics.pending_tasks_count || 0;
+            }
+
+            // Update primary team
+            if (data.primary_team) {
+                const pt = data.primary_team;
+                document.getElementById('primaryTeamName').textContent = pt.name;
+                document.getElementById('primaryTeamDesc').textContent = pt.description || pt.project_title;
+                
+                if (pt.missing_skills && pt.missing_skills.length > 0) {
+                    document.getElementById('missingSkillsAlert').style.display = 'flex';
+                    document.getElementById('missingSkillsTags').textContent = pt.missing_skills.join(', ');
+                } else {
+                    document.getElementById('missingSkillsAlert').style.display = 'none';
+                }
+
+                if (pt.members && pt.members.length > 0) {
+                    const tbody = document.getElementById('primaryTeamMembersTable');
+                    tbody.innerHTML = pt.members.map(m => `
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="avatar-sm bg-primary text-white fw-bold">${(m.full_name || m.name || 'M').charAt(0)}</div>
+                                    <div>
+                                        <div class="fw-bold text-dark">${m.full_name || m.name}</div>
+                                        <div class="text-muted" style="font-size:0.75rem;">${m.email || ''}</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><span class="badge bg-primary-subtle text-primary">${m.assigned_role || m.role || 'Member'}</span></td>
+                            <td>${m.department || 'Engineering'}</td>
+                            <td><span class="badge bg-success-subtle text-success">Active</span></td>
+                        </tr>
+                    `).join('');
+                }
+            }
+        }
+    } catch (e) {
+        console.warn('Dashboard load failed:', e);
+    }
+}
+
+async function respondInvite(inviteId, decision) {
+    try {
+        const res = await window.api.respondInvite(inviteId, decision);
+        window.tfToast(res.message || `Invitation ${decision}!`, 'success');
+        document.getElementById('pendingInvitesContainer').innerHTML = '<div class="text-muted small text-center py-3">No pending invitations.</div>';
+        document.getElementById('pendingInvitesBadge').textContent = '0 Pending';
+        document.getElementById('statInvites').textContent = '0';
+    } catch (e) {
+        window.tfToast('Failed to respond to invitation', 'error');
+    }
+}
+
+document.addEventListener('DOMContentLoaded', loadDashboard);
+</script>
+</body>
+</html>

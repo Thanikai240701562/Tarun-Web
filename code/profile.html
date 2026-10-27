@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Profile & Skills — TeamForge</title>
+    <meta name="description" content="Manage your technical skills, portfolio links, and availability">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap 5 CSS & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <!-- Custom Design System -->
+    <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+
+<div class="app-wrapper">
+    <div class="sidebar-overlay"></div>
+
+    <!-- Sidebar Navigation -->
+    <aside class="app-sidebar">
+        <div class="sidebar-header">
+            <a href="dashboard.html" class="sidebar-brand text-decoration-none">
+                <div class="brand-icon">
+                    <i class="bi bi-diagram-3-fill"></i>
+                </div>
+                <div>
+                    <span>Team<span style="color:#818cf8;">Forge</span></span>
+                </div>
+            </a>
+        </div>
+
+        <div class="sidebar-menu">
+            <div class="menu-category">Overview</div>
+            <a href="dashboard.html" class="nav-link-custom">
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span>Dashboard</span>
+            </a>
+
+            <div class="menu-category">Collaboration & Events</div>
+            <a href="students.html" class="nav-link-custom">
+                <i class="bi bi-people-fill"></i>
+                <span>Student Directory</span>
+            </a>
+            <a href="events.html" class="nav-link-custom">
+                <i class="bi bi-calendar-event-fill"></i>
+                <span>College Events</span>
+            </a>
+            <a href="teams.html" class="nav-link-custom">
+                <i class="bi bi-folder-fill"></i>
+                <span>My Teams & Projects</span>
+            </a>
+
+            <div class="menu-category">Classical AI Engine</div>
+            <a href="ai-generator.html" class="nav-link-custom">
+                <i class="bi bi-cpu-fill"></i>
+                <span>AI Team Generator</span>
+            </a>
+
+            <div class="menu-category">Team Operations</div>
+            <a href="tasks.html" class="nav-link-custom">
+                <i class="bi bi-kanban-fill"></i>
+                <span>Task Board</span>
+            </a>
+            <a href="chat.html" class="nav-link-custom">
+                <i class="bi bi-chat-dots-fill"></i>
+                <span>Team Group Chat</span>
+            </a>
+            <a href="sessions.html" class="nav-link-custom">
+                <i class="bi bi-clock-history"></i>
+                <span>Scheduled Sessions</span>
+            </a>
+
+            <div class="menu-category" id="sidebarAdminCategory">Faculty & Admin</div>
+            <a href="admin.html" class="nav-link-custom sidebar-admin-link">
+                <i class="bi bi-shield-lock-fill"></i>
+                <span>Faculty Center & Logs</span>
+            </a>
+        </div>
+
+        <div class="sidebar-footer">
+            <div class="d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center gap-2 overflow-hidden">
+                    <div class="avatar-sm bg-primary text-white fw-bold" id="sidebarUserAvatar">A</div>
+                    <div class="text-truncate" style="line-height:1.2;">
+                        <div class="text-white small fw-bold text-truncate" id="sidebarUserName">Aarav Sharma</div>
+                        <div class="text-secondary text-truncate" style="font-size:0.72rem;" id="sidebarUserEmail">aarav.sharma@student.edu</div>
+                    </div>
+                </div>
+                <button type="button" class="btn text-secondary hover-white p-1" title="Sign Out" onclick="window.api.logout()">
+                    <i class="bi bi-box-arrow-right fs-5"></i>
+                </button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="app-main">
+        <header class="app-topbar">
+            <div class="d-flex align-items-center gap-3">
+                <button type="button" class="btn btn-sm btn-light d-lg-none" id="sidebarToggleBtn">
+                    <i class="bi bi-list fs-5"></i>
+                </button>
+                <h5 class="fw-bold mb-0 text-dark">Student Profile & Technical Skills</h5>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+                <a href="settings.html" class="btn btn-sm btn-white border" title="Settings">
+                    <i class="bi bi-gear text-secondary"></i>
+                </a>
+                <div class="avatar-sm bg-primary text-white fw-bold" id="topbarUserAvatar">A</div>
+            </div>
+        </header>
+
+        <main class="content-body">
+            <div class="container-fluid px-0">
+                <div class="row g-4">
+                    <!-- Left: Profile Details Form -->
+                    <div class="col-lg-7">
+                        <div class="card-tf p-4 border bg-white shadow-sm mb-4">
+                            <h5 class="fw-bold text-dark mb-3">General Information</h5>
+
+                            <form id="profileForm">
+                                <div class="mb-3">
+                                    <label class="form-label small fw-semibold text-muted">Full Name</label>
+                                    <input type="text" class="form-control" id="profName" value="Aarav Sharma" required>
+                                </div>
+
+                                <div class="row g-3 mb-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label small fw-semibold text-muted">College Email Address</label>
+                                        <input type="email" class="form-control bg-light" id="profEmail" value="aarav.sharma@student.edu" readonly>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label small fw-semibold text-muted">Academic Department</label>
+                                        <select class="form-select" id="profDept">
+                                            <option value="Computer Science & Engineering">Computer Science & Engineering</option>
+                                            <option value="Information Technology">Information Technology</option>
+                                            <option value="Artificial Intelligence & Data Science">Artificial Intelligence & Data Science</option>
+                                            <option value="Electronics & Communication">Electronics & Communication</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label small fw-semibold text-muted">Availability Status</label>
+                                    <select class="form-select" id="profAvail">
+                                        <option value="available">Available for Team Matching</option>
+                                        <option value="in_team">Active in Project Team</option>
+                                        <option value="busy">Busy / Unavailable</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label small fw-semibold text-muted">Bio & Experience</label>
+                                    <textarea class="form-control" id="profBio" rows="3">Full-stack developer with 2+ years experience in PHP, MySQL, and modern JavaScript. Love leading agile hackathon teams.</textarea>
+                                </div>
+
+                                <div class="row g-3 mb-4">
+                                    <div class="col-md-6">
+                                        <label class="form-label small fw-semibold text-muted">GitHub Profile URL</label>
+                                        <input type="url" class="form-control" id="profGithub" value="https://github.com/aaravsharma">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label small fw-semibold text-muted">Portfolio Website</label>
+                                        <input type="url" class="form-control" id="profPortfolio" value="https://aaravsharma.dev">
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-tf-primary px-4 py-2">
+                                    <i class="bi bi-check-lg me-1"></i> Save Profile Changes
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Right: Technical Skills Profile -->
+                    <div class="col-lg-5">
+                        <div class="card-tf p-4 border bg-white shadow-sm mb-4">
+                            <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom">
+                                <h5 class="fw-bold text-dark mb-0">Verified Skills</h5>
+                                <span class="badge bg-primary-subtle text-primary">CSP Indexed</span>
+                            </div>
+
+                            <p class="text-muted small mb-3">
+                                These skills are directly used by the Classical AI Engine to evaluate team balance and compute heuristic coverage.
+                            </p>
+
+                            <div class="d-flex flex-column gap-2" id="userSkillsList">
+                                <div class="p-2 px-3 rounded bg-light border d-flex justify-content-between align-items-center small">
+                                    <span class="fw-semibold text-dark">PHP</span>
+                                    <span class="text-warning">★★★★★ <span class="text-muted small ms-1">(5/5)</span></span>
+                                </div>
+                                <div class="p-2 px-3 rounded bg-light border d-flex justify-content-between align-items-center small">
+                                    <span class="fw-semibold text-dark">MySQL</span>
+                                    <span class="text-warning">★★★★☆ <span class="text-muted small ms-1">(4/5)</span></span>
+                                </div>
+                                <div class="p-2 px-3 rounded bg-light border d-flex justify-content-between align-items-center small">
+                                    <span class="fw-semibold text-dark">JavaScript</span>
+                                    <span class="text-warning">★★★★★ <span class="text-muted small ms-1">(5/5)</span></span>
+                                </div>
+                                <div class="p-2 px-3 rounded bg-light border d-flex justify-content-between align-items-center small">
+                                    <span class="fw-semibold text-dark">HTML & CSS</span>
+                                    <span class="text-warning">★★★★★ <span class="text-muted small ms-1">(5/5)</span></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<!-- Bootstrap & JS Framework -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/main.js"></script>
+<script>
+async function loadProfile() {
+    try {
+        const res = await window.api.getProfile();
+        if (res.success && res.user) {
+            const u = res.user;
+            document.getElementById('profName').value = u.full_name || '';
+            document.getElementById('profEmail').value = u.email || '';
+            document.getElementById('profDept').value = u.department || 'Computer Science & Engineering';
+            document.getElementById('profAvail').value = u.availability_status || 'available';
+            document.getElementById('profBio').value = u.bio || '';
+            document.getElementById('profGithub').value = u.github_url || '';
+            document.getElementById('profPortfolio').value = u.portfolio_url || '';
+
+            if (u.skills && u.skills.length > 0) {
+                const listEl = document.getElementById('userSkillsList');
+                listEl.innerHTML = u.skills.map(sk => {
+                    const stars = '★'.repeat(sk.proficiency_level || 4) + '☆'.repeat(5 - (sk.proficiency_level || 4));
+                    return `
+                        <div class="p-2 px-3 rounded bg-light border d-flex justify-content-between align-items-center small">
+                            <span class="fw-semibold text-dark">${sk.name}</span>
+                            <span class="text-warning">${stars} <span class="text-muted small ms-1">(${sk.proficiency_level}/5)</span></span>
+                        </div>
+                    `;
+                }).join('');
+            }
+        }
+    } catch (e) {
+        console.warn('Profile load failed:', e);
+    }
+}
+
+document.getElementById('profileForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const data = {
+        full_name: document.getElementById('profName').value.trim(),
+        department: document.getElementById('profDept').value,
+        availability_status: document.getElementById('profAvail').value,
+        bio: document.getElementById('profBio').value.trim(),
+        github_url: document.getElementById('profGithub').value.trim(),
+        portfolio_url: document.getElementById('profPortfolio').value.trim()
+    };
+
+    try {
+        const res = await window.api.updateProfile(data);
+        window.tfToast(res.message || 'Profile updated successfully!', 'success');
+    } catch (err) {
+        window.tfToast('Failed to update profile', 'error');
+    }
+});
+
+document.addEventListener('DOMContentLoaded', loadProfile);
+</script>
+</body>
+</html>
